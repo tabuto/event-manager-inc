@@ -4,16 +4,18 @@ import it.inc.org.spring.model.Event;
 
 import java.util.List;
 
-public class EventDaoImpl implements EventDao {
+import org.hibernate.Criteria;
+
+public class EventDaoImpl extends AbstractDao implements EventDao {
 
 	public void saveEvent(Event event) {
-		// TODO Auto-generated method stub
-
+        persist(event);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Event> findAllEvents() {
-		// TODO Auto-generated method stub
-		return null;
+        Criteria criteria = getSession().createCriteria(Event.class);
+        return (List<Event>) criteria.list();
 	}
 
 	public void deleteEventById(int id) {
@@ -27,8 +29,7 @@ public class EventDaoImpl implements EventDao {
 	}
 
 	public void updateEvent(Event event) {
-		// TODO Auto-generated method stub
-
+		update(event);
 	}
 
 }
