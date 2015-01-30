@@ -1,0 +1,28 @@
+
+
+Attivita' da effettuare:
+
+* aggiungere flag pagato all'evento e gestione del flag
+* gestione ripetizione eventi;
+* ordinamento server side degli eventi
+* gestione somma per gli eventi pagati
+* implementare delete dove necessario
+* implementare i link nella pagina evento: campo e user devono puntare alle loro pagine con il relativo dettaglio
+* inibire modifiche evento da pagine diverse da scheduler
+* aggiungere colore ai campi, in modo che nel calendario ad ogni campo corrisponda un colore
+* aggiungere statistiche e grafici per lista eventi
+* eliminare plugin, js, css non usati
+
+* ? aggiungere login ?
+*
+
+Changelog:
+
+30/01/2015:
+	* aggunto scheduler con risorse legate ai campi
+	* ricerche server side della pagina eventi
+	* paginazione server side della pagina eventi
+	* paginazione server side della pagina scheduler
+	* aggiunto campo user all'object event del plugin js 
+	* autocomplete dei campi utente nella creazione dell'evento
+	* gestione del formato data

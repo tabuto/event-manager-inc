@@ -1,9 +1,13 @@
 package it.inc.org.spring.configuration;
  
+import it.inc.org.spring.model.UserModel;
+
 import java.util.Properties;
  
+
 import javax.sql.DataSource;
  
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +34,11 @@ public class HibernateConfiguration {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan(new String[] { "it.inc.org.spring.model" });
+        sessionFactory.setAnnotatedClasses(UserModel.class);
+        sessionFactory.setAnnotatedPackages(new String[] { "it.inc.org.spring.model" });
+        
         sessionFactory.setHibernateProperties(hibernateProperties());
+        System.out.println(sessionFactory.getHibernateProperties());
         return sessionFactory;
      }
      
@@ -41,6 +49,7 @@ public class HibernateConfiguration {
         dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
         dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+        
         return dataSource;
     }
      
@@ -49,6 +58,7 @@ public class HibernateConfiguration {
         properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
         properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
         properties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
+        //properties.put("hibernate.connection.provider_class", "org.hibernate.connection.C3P0ConnectionProvider");
         return properties;        
     }
      

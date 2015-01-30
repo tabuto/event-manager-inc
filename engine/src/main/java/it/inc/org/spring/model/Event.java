@@ -1,38 +1,201 @@
 package it.inc.org.spring.model;
 
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+/**
+ * Classe che rappresenta un evento.
+ * Il formato data è: 2015-01-19T21:30:00
+ * 
+ * @author f.didio
+ *
+ */
 @Entity
-@Table(name="EVENT")
-public class Event {
+@Table(name="TBL_EVENTS")
+public class Event implements Serializable{
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
- 
-    @Column(name = "NAME", nullable = false)
-    private String name;
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+	
 
-	public int getId() {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7109500526912048809L;
+
+	@Id
+    private String id;
+ 
+    @Column(name = "start_date", nullable = false)
+    private Date startDate;
+    @Transient
+    private String start;
+    @Transient
+    private String end;
+
+    @Column(name = "end_date", nullable = false)
+    private Date endDate;
+    
+    @Column(name = "text")
+    private String text;
+    
+    //@Column(name = "id_user")
+    @Transient
+    private long user;
+    
+    @Transient
+    private int type;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private UserModel userModel;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_type")
+    private TypeModel typeModel;
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setStartDate(Date startDate) {
+		
+		this.startDate = startDate;
+		
 	}
+
+	public String getStart() {
+		if(start==null && startDate!=null){
+			String formattedDate = new SimpleDateFormat(Event.DATE_FORMAT).format(startDate);
+			this.start = formattedDate;
+		}
+		return start;
+	}
+
+	public void setStart(String start) {
+		//2015-01-19T21:30:00
+		try {
+			Date date = new SimpleDateFormat(Event.DATE_FORMAT).parse(start);
+			this.start = start;
+			this.startDate = date;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public String getEnd() {
+		if(end==null && endDate!=null){
+			String formattedDate = new SimpleDateFormat(Event.DATE_FORMAT).format(endDate);
+			this.end = formattedDate;
+		}
+		return end;
+	}
+
+	public void setEnd(String end) {
+		try {
+			Date date = new SimpleDateFormat(Event.DATE_FORMAT).parse(end);
+			this.end = end;
+			this.endDate = date;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+		
+		
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public long getUser() {
+		if(this.getUserModel() == null)
+			this.userModel = new UserModel();
+		return userModel.getId();
+	}
+
+	public void setUser(long user) {
+		if(this.getUserModel() == null)
+			this.userModel = new UserModel();
+
+		this.userModel.setId( user);
+	}
+
+	public int getType() {
+		if(this.getTypeModel()==null)
+			this.typeModel = new TypeModel();
+		return typeModel.getId();
+	}
+
+	public void setType(int type) {
+		if(this.getTypeModel()==null)
+			this.typeModel = new TypeModel();
+		this.typeModel.setId(type);
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
+
+    public UserModel getUserModel() {
+		return userModel;
+	}
+
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
+	}
+	
+	
+
+	public TypeModel getTypeModel() {
+		return typeModel;
+	}
+
+	public void setTypeModel(TypeModel typeModel) {
+		this.typeModel = typeModel;
+	}
+
+	@Override
+	public String toString() {
+		return "Event [id=" + id + ", startDate=" + startDate + ", start="
+				+ start + ", end=" + end + ", endDate=" + endDate + ", text="
+				+ text + ", user=" + user + ", type=" + type + "]";
+	}
+
+    
     
     
 }
