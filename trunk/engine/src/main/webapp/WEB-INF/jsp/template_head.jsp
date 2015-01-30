@@ -171,9 +171,6 @@
                         <a href="/engine/types.html"><i class="fa fa-fw fa-bar-chart-o"></i> Campi</a>
                     </li>
                     <li>
-                        <a href="/engine/calendar.html"><i class="fa fa-fw fa-table"></i> Calendario</a>
-                    </li>
-                    <li>
                         <a href="/engine/users.html"><i class="fa fa-fw fa-edit"></i> Utenti</a>
                     </li>
                     <li>

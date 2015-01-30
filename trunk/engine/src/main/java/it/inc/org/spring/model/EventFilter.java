@@ -4,7 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-
+/**
+ * Classe di utilita' che traforma la mappa di parametri in request
+ * inviati dal componente js DataTable nella pagina events.jsp
+ * in un bean usato dal dao per preparare la query
+ * che contiene tutti i dati per valorizzare la classe
+ * DataTableSource
+ */
 public class EventFilter extends AbstractFilter{
 
 	

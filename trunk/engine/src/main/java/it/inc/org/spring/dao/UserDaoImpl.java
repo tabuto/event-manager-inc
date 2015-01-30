@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Component;
-
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 @Component
 public class UserDaoImpl extends AbstractDao implements UserDao {
 

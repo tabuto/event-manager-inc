@@ -5,9 +5,6 @@ package it.inc.org.spring.configuration;
 //import javax.servlet.ServletException;
 //import javax.servlet.ServletRegistration.Dynamic;
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
 
 //WebAppInitializer
 public class WebAppInitializer //implements WebApplicationInitializer 

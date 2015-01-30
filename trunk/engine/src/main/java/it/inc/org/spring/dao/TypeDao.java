@@ -1,8 +1,8 @@
 package it.inc.org.spring.dao;
 
-import java.util.List;
-
 import it.inc.org.spring.model.TypeModel;
+
+import java.util.List;
 
 public interface TypeDao {
 	

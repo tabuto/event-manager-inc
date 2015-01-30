@@ -3,6 +3,11 @@ package it.inc.org.spring.model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 
+ * Rappresenta i dati da passare al componente js DataTable v.1.9.1
+ * 
+ */
 public class DataTableSource implements Serializable{
 	
 	/**

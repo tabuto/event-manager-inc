@@ -48,6 +48,7 @@ public class EventDaoImpl extends AbstractDao implements EventDao {
 		update(event);
 	}
 
+
 	@Override
 	public List<Event> eventsByDay(String today) {
 		Query q = getSession().createQuery("FROM Event c where c.startDate >= :STARTDATE ");
