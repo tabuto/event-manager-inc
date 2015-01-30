@@ -1,8 +1,8 @@
 package it.inc.org.spring.dao;
 
-import java.util.List;
-
 import it.inc.org.spring.model.UserModel;
+
+import java.util.List;
 
 public interface UserDao {
 	

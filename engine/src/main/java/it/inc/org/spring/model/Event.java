@@ -10,13 +10,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
  * Classe che rappresenta un evento.
  * Il formato data è: 2015-01-19T21:30:00
+ * N.B. presenta dei fake-attribute per la visualizzazione delle date
+ * i fake-attribute user e type sono da eliminare, sono stati mantenuti per retrocompatibilità
+ * in quanto le relazioni jpa con le rispettive entity sono state aggiunte dopo.
  * 
  * @author f.didio
  *
