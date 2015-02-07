@@ -7,8 +7,13 @@
 
 <jsp:include page="template_head.jsp" />
 
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+	<script src="<c:url value="/resources/js/jquery-1.9.1.min.js" />" type="text/javascript"></script>
+	<script src="<c:url value="/resources/js/jquery-ui.js" />" type="text/javascript"></script>
+	<script src="<c:url value="/resources/js/jquery.dataTables.js" />" type="text/javascript"></script>
+	<!-- 
+	<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+	 -->
+
 
 <script type="text/javascript">
 
@@ -58,6 +63,7 @@
 
 <br>
 
+<div id="user-form-modal" title="User Detail">
 <form:form id="userForm" method="POST" commandName="user" action="/engine/saveUser" role="form">
    <table>
     <tr>
@@ -83,20 +89,39 @@
     </tr>
     <tr>
         <td colspan="2">
-        	<input type="reset" value="Azzera" id="reset" class="btn btn-default" />
+        	<input type="reset" value="Crea Nuovo" id="reset" class="btn btn-default" />
             <input type="submit" value="Salva" class="btn btn-default"/>
             
         </td>
     </tr>
 </table>  
 </form:form>
-
+</div>
  <script>
  function isEmpty(str) {
 	    return (!str || 0 === str.length);
 	};
 
-
+	var evDialog = $( "#user-form-modal" ).dialog({
+	    autoOpen: false,
+	    height: 350,
+	    width: 600,
+	    modal: true,
+	    buttons: {
+	      "Close": function() {
+	    	  //resetUserForm();
+	    	  evDialog.dialog( "close" ); 
+	      }
+	    },
+	    close: function() {
+	      
+	      //allFields.removeClass( "ui-state-error" );
+	      //var args = $("#user-form-modal").data('args');
+	      //if (args != null )
+	      	//saveNewEvent(args,false);
+	    }
+	  });
+	
  $(document).ready(function() {
 	    //alert($('#usersTable'));
 	    var table = $('#usersTable').DataTable();
@@ -111,7 +136,11 @@
 			$("#email").val(oData[3]);
 			$("#tel").val(oData[4]);
 			$("#role").val(oData[5]);
+			evDialog.dialog( "open" );
 		});
+	    
+	    if(table.fnGetData().length == 0)
+	    	evDialog.dialog( "open" );
  });
 
 
@@ -119,6 +148,7 @@
  $("#reset").click(function() {
 	 
 	 $("#id").val(0);
+	
      //$(this).closest('form').find("description").val("reset");
  });
 
@@ -167,6 +197,9 @@
 
 	}); 
 
+  
+  
+  
   </script>
 <br>
 <br>

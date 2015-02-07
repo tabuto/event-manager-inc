@@ -38,7 +38,7 @@
 
  <div class="row">
                     <div class="col-lg-6">
-                    
+                    <div id="event-form-modal" title="Event Detail">
                     <label id="text_lbl">Nominativo</label>
         			<input id="text" class="form-control" readonly="true"></input>
         			
@@ -48,6 +48,12 @@
                     <label id="surname_lbl">Cognome</label>
         			<input id="ev_surname" class="form-control" readonly="true"></input>
         			
+        			<label id="tel_lbl">Tel.</label>
+        			<input id="ev_tel" class="form-control" readonly="true"></input>
+        			
+        			<label id="mail_lbl">Mail</label>
+        			<input id="ev_mail" class="form-control" readonly="true"></input>
+        			
         			<label id="start_lbl">Inzio</label>
         			<input id="ev_start" class="form-control" readonly="true"></input>
                     
@@ -56,7 +62,11 @@
         			
         			<label id="resource_lbl">Campo</label>
         			<input id="ev_resource" class="form-control" readonly="true"></input>
-                    
+        			
+        			<label id="checkpaid_lbl">Pagato</label>
+        			<input type="checkbox" id="ev_checkPaid" class="form-control" readonly="true" onclick="return false"/>
+        			
+                    </div>
                     
                     
                     </div>
@@ -100,6 +110,62 @@
 
 <script>
 
+function getResourceName(dp,resId){
+	var i=0;
+	for(i=0; dp.resources.length;i++){
+		if(dp.resources[i].id == resId){
+			return dp.resources[i].name;
+		}
+	}
+	return "";//default
+}
+
+function getResourceColor(dp,resId){
+	var i=0;
+	for(i=0; dp.resources.length;i++){
+		if(dp.resources[i].id == resId){
+			return dp.resources[i].color;
+		}
+	}
+	return "#6633FF";//default
+}
+
+function togglePaidEvent(id, startdate){
+	
+	$.getJSON( 'http://localhost:8080/engine/togglePaidEvent', { term: id , today: startdate } )
+	  .done(function( json ) {
+	  
+		dp.events.list = [];
+	    for (var i =0; i<json.length;i++){
+	    	 //console.log( "JSON Data: " + json+[i]);
+   		 var e = new DayPilot.Event({
+   	            start: new DayPilot.Date(longToDate(json[i].startDate)),
+   	            end: new DayPilot.Date(longToDate(json[i].endDate)),
+   	            id: json[i].id,
+   	       		resource: ""+json[i].type,
+   	            text: json[i].text
+   	            
+   	          
+   	        });
+   		   //e.type = data[i].campo
+   		  e.userid = ""+json[i].user;
+   		  e.paid = json[i].paid;
+   	      dp.events.add(e);
+   	      dp.update();    
+   	}
+   	
+	    //dp.update();        
+		//dp.clearSelection();
+	    
+	    
+	  })
+	  .fail(function( jqxhr, textStatus, error ) {
+	    var err = textStatus + ", " + error;
+	    console.log( "Request Failed: " + err );
+	});
+	
+}
+
 function deleteEvent(id, startdate){
 	
 	$.getJSON( 'http://localhost:8080/engine/delEvent', { term: id , today: startdate } )
@@ -113,11 +179,13 @@ function deleteEvent(id, startdate){
    	            end: new DayPilot.Date(longToDate(json[i].endDate)),
    	            id: json[i].id,
    	       		resource: ""+json[i].type,
-   	            text: json[i].text,
+   	            text: json[i].text
+   	            
    	          
    	        });
    		   //e.type = data[i].campo
    		  e.userid = ""+json[i].user;
+   		  e.paid = json[i].paid;
    	      dp.events.add(e);
    	      dp.update();    
    	}
@@ -201,11 +269,15 @@ function loadEvents(dp,startdate){
      	            id: json[i].id,
      	       		resource: ""+json[i].type,
      	            text: json[i].text,
-     	            userid: ""+json[i].user
+     	            userid: ""+json[i].user,
+     	            paid: json[i].paid
+     	            
+     	          
      	          
      	        });
      		   //e.type = data[i].campo
      		  //e.userid = ""+json[i].user;
+     		   //e.paid = (json[i].paid=='Y');
      	      dp.events.add(e);
      	      dp.update();    
      	}
@@ -226,7 +298,7 @@ function loadResources(dp){
 	$.getJSON( "http://localhost:8080/engine/typeCombo", function( data ) {
 		
 		for (var i =0; i<data.length;i++){
-			dp.resources[i]={name: data[i].name, id: ""+data[i].id};
+			dp.resources[i]={name: data[i].name, id: ""+data[i].id, color: data[i].color};
 		}
 		dp.update();
 	});
@@ -246,7 +318,9 @@ function saveNewEvent(args, update){
 				 "end": args.e.end(), 
 				 "text" : args.e.text(), 
 				 "type" : args.e.resource(),
-				 "user" :  args.e.userid()};
+				 "user" :  args.e.userid(),
+		 		 "paid" : args.e.paid()
+		 		 };
 	 }else{
 		 var evtext = $('#name').val()+" "+$('#surname').val();
 		 json = { "id" : DayPilot.guid(), 
@@ -254,7 +328,10 @@ function saveNewEvent(args, update){
 				 "end": args.end, 
 				 "text" : evtext, 
 				 "type" : args.resource,
-				 "user" :  $("#iduser").val()};
+				 "user" :  $("#iduser").val(),
+				 "paid" : "N"
+				 };
+		 alert(getResourceColor(dp, args.resource));
 	 }
 	 
 	    
@@ -280,6 +357,7 @@ function saveNewEvent(args, update){
 	      		        text: evtext
 	      		    });
 	                e.userid = $("#iduser");
+	                e.paid = "N";
 	         	    dp.events.add(e);
 	         	    if(update)
 	         	    	dp.message("Updated");
@@ -325,6 +403,26 @@ function selectUser(){
 	
 	return true;
 };
+
+var evDialog = $( "#event-form-modal" ).dialog({
+    autoOpen: false,
+    height: 700,
+    width: 600,
+    modal: true,
+    buttons: {
+      "Close": function() {
+    	  //resetUserForm();
+    	  evDialog.dialog( "close" ); 
+      }
+    },
+    close: function() {
+      
+      //allFields.removeClass( "ui-state-error" );
+      //var args = $("#user-form-modal").data('args');
+      //if (args != null )
+      	//saveNewEvent(args,false);
+    }
+  });
 
 var dialog = $( "#user-form-modal" ).dialog({
     autoOpen: false,
@@ -426,10 +524,39 @@ dp.onTimeRangeSelected = function (args) {
    
 };
 
+function getUser(id){
+	dfr = $.Deferred();
+	 
+	 $.getJSON( 'http://localhost:8080/engine/loadUser', { term: id } )
+		  .done(function( json ) {
+		  
+			  dfr.resolve(json);
+		    
+		    
+		  })
+		  .fail(function( jqxhr, textStatus, error ) {
+		    var err = textStatus + ", " + error;
+		    console.log( "Request Failed: " + err );
+		});
+	 
+	
+	 return dfr.promise();
+}
+
 dp.onEventClick = function(args) {
 	  $("#text").val(args.e.text());
 	  $("#ev_start").val(args.e.start());
 	  $("#ev_end").val(args.e.end());
+	  $("#ev_resource").val(getResourceName(dp, args.e.resource()));
+	  $('#ev_checkPaid').prop('checked',(args.e.paid()=="Y"));
+	  
+	  $.when(getUser(args.e.userid())).done(function(json){
+		$("#ev_name").val(json.name);
+		$("#ev_surname").val(json.surname);
+		$("#ev_tel").val(json.tel);
+		$("#ev_mail").val(json.mail);
+	  	evDialog.dialog( "open" );
+	  });
 	  
 };
 
@@ -438,11 +565,23 @@ dp.contextMenu = new DayPilot.Menu({items: [
                                             	//alert("Event id: " + this.source.id());
                                             	deleteEvent(this.source.id(),nav.selectionStart.value);
                                             	} },
+                                            
+                                            	{text: 'Pagato-Non Pagato', onclick: function() {
+                                                	//alert("Event id: " + this.source.id());
+                                                	togglePaidEvent(this.source.id(),nav.selectionStart.value);
+                                                	} },
+                                           		
                                             	
                                            	  {text:"Id", onclick: function() {
                                                  	alert("Event id: " + this.source.id());
                                                  	} },
                                         ]});
+
+dp.onBeforeEventRender = function(args) {
+		args.e.barColor = getResourceColor(dp, args.e.resource);
+	
+    //args.e.bubbleHtml = "<div><b>" + args.e.text + "</b></div><div>Start: " + new DayPilot.Date(args.e.start).toString("M/d/yyyy") + "</div><div>End: " + new DayPilot.Date(args.e.end).toString("M/d/yyyy") + "</div>";
+};
 
 dp.init();
 loadResources(dp);
@@ -544,9 +683,7 @@ dp.eventMovingStartEndEnabled = true;
 dp.eventResizingStartEndEnabled = true;
 dp.timeRangeSelectingStartEndEnabled = true;
 
-dp.onBeforeEventRender = function(args) {
-    args.e.bubbleHtml = "<div><b>" + args.e.text + "</b></div><div>Start: " + new DayPilot.Date(args.e.start).toString("M/d/yyyy") + "</div><div>End: " + new DayPilot.Date(args.e.end).toString("M/d/yyyy") + "</div>";
-};
+
 
 dp.onBeforeResHeaderRender = function(args) {
 };

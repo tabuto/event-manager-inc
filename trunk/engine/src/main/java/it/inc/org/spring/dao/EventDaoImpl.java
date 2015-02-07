@@ -72,9 +72,14 @@ public class EventDaoImpl extends AbstractDao implements EventDao {
 
 	@Override
 	public DataTableSource eventsByFilter(EventFilter filter) {
+		DataTableSource source = new DataTableSource();
 		int pageNumber = (filter.getiDisplayStart()  + filter.getiDisplayLength())/filter.getiDisplayLength();
 		
-		String query = "FROM Event c  WHERE 1 = 1 ";
+		String query = "SELECT e FROM Event e  ";
+		
+		String joins = " ";
+		
+		String where = " WHERE 1 = 1 ";
 		
 		Number totalCount    =  (Number) getSession().createCriteria( Event.class).setProjection(Projections.rowCount()).uniqueResult();
 		//int totalCount =  ((Long)getSession().createQuery("select count(*) from Event ").uniqueResult()).intValue();
@@ -83,42 +88,90 @@ public class EventDaoImpl extends AbstractDao implements EventDao {
 		
 		
 		if(filter.getStartDateFrom()!= null){
-			query+=" AND startDate >= :STARTDATE_FROM ";
+			where+=" AND startDate >= :STARTDATE_FROM ";
 			parMap.put("STARTDATE_FROM", filter.getStartDateFrom());
 		}
 		
 		if(filter.getStartDateTo()!= null){
-			query+=" AND startDate <= :STARTDATE_TO ";
+			where+=" AND startDate <= :STARTDATE_TO ";
 			parMap.put("STARTDATE_TO", filter.getStartDateTo());
 		}
 		
-//		Query q = getSession().createQuery(query);
-		Query q_withoutPag = getSession().createQuery(query);
-		
-		
-		for(String key:parMap.keySet()){
-			q_withoutPag.setParameter(key, parMap.get(key));
+		if(filter.getEndDateFrom()!=null){
+			where+=" AND endDate >= :ENDDATE_FROM ";
+			parMap.put("ENDDATE_FROM", filter.getEndDateFrom());
 		}
-		List<Event> allFiltered = q_withoutPag.list();
 		
-//		q.setFirstResult((pageNumber-1) * filter.getiDisplayLength()); //page no
-//		q.setMaxResults( filter.getiDisplayLength());//no of rows
+		if(filter.getEndDateTo()!=null){
+			where+=" AND endDate <= :ENDDATE_TO ";
+			parMap.put("ENDDATE_TO", filter.getEndDateTo());
+		}
 		
-		int startIndx = (pageNumber-1) * filter.getiDisplayLength();
-		int endIndx = ((pageNumber-1) * filter.getiDisplayLength())+ filter.getiDisplayLength();
-		if(endIndx> allFiltered.size())
-			endIndx=allFiltered.size();
+		if(filter.getText()!=null && filter.getText().length()>2){
+			where+=" AND upper(text) like :TEXT ";
+			parMap.put("TEXT", "%"+filter.getText().toUpperCase()+"%");
+		}
 		
-		List<Event> results = q_withoutPag.list().subList(startIndx ,endIndx);
-		System.out.println("Query: "+ query);
-		System.out.println("Result size: " +results.size());
+		if(filter.getUserNameTel() != null && filter.getUserNameTel().length()>2){
+			joins+=" INNER JOIN e.userModel u ";
+			where+=" AND upper( concat(u.name,' ',u.surname,' ',u.tel)) like :USER_NAME_TEL ";
+			parMap.put("USER_NAME_TEL", "%"+filter.getUserNameTel().toUpperCase()+"%");
+		}
 		
-		DataTableSource source = new DataTableSource();
-		source.setAaData(results);
-		source.setDraw(pageNumber);
-		source.setiTotalRecords(allFiltered.size()); //tutti filtrati 
-		source.setiTotalDisplayRecords(totalCount.intValue()); //tutti
-		source.setsEcho(filter.getsEcho());
+		if(filter.getTypeName() != null && filter.getTypeName().length()>=2){
+			joins+=" INNER JOIN e.typeModel t ";
+			where+=" AND upper( t.name ) like :TYPE_NAME ";
+			parMap.put("TYPE_NAME", "%"+filter.getTypeName().toUpperCase()+"%");
+		}
+		
+		if(filter.getPaid()!=null && 
+				("SI".equalsIgnoreCase(filter.getPaid()) 
+						|| "NO".equalsIgnoreCase(filter.getPaid())  ) ){
+			boolean isPaid = "SI".equalsIgnoreCase(filter.getPaid());
+			where+=" AND paid = " +(isPaid?"'Y'":"'N'");
+			
+		}
+		
+		query+=joins;
+		query+=where;
+		
+//		Query q = getSession().createQuery(query);
+		try{
+			Query q_withoutPag = getSession().createQuery(query);
+			//q_withoutPag.setEntity(arg0, arg1)
+			
+			for(String key:parMap.keySet()){
+				q_withoutPag.setParameter(key, parMap.get(key));
+			}
+			List<Event> allFiltered = q_withoutPag.list();
+			
+	//		q.setFirstResult((pageNumber-1) * filter.getiDisplayLength()); //page no
+	//		q.setMaxResults( filter.getiDisplayLength());//no of rows
+			
+			int startIndx = (pageNumber-1) * filter.getiDisplayLength();
+			int endIndx = ((pageNumber-1) * filter.getiDisplayLength())+ filter.getiDisplayLength();
+			if(endIndx> allFiltered.size())
+				endIndx=allFiltered.size();
+			
+			List<Event> results = q_withoutPag.list().subList(startIndx ,endIndx);
+			System.out.println("Query: "+ query);
+			System.out.println("Result size: " +results.size());
+			
+			source.setAaData(results);
+			source.setDraw(pageNumber);
+			source.setiTotalRecords(allFiltered.size()); //tutti filtrati 
+			source.setiTotalDisplayRecords(totalCount.intValue()); //tutti
+			source.setsEcho(filter.getsEcho());
+			
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			System.out.println("Query: "+ query);
+			e.printStackTrace();
+			
+		}
+		
+		
+		
 		return source;
 		
 	}

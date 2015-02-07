@@ -52,6 +52,12 @@ public class Event implements Serializable{
     @Column(name = "text")
     private String text;
     
+    @Column(name = "paid")
+    private String paid = "N";
+    
+    @Transient
+    private boolean checkPaid;
+    
     //@Column(name = "id_user")
     @Transient
     private long user;
@@ -66,6 +72,9 @@ public class Event implements Serializable{
     @ManyToOne
     @JoinColumn(name = "id_type")
     private TypeModel typeModel;
+    
+    @Transient
+    private float price;
 
 	public String getId() {
 		return id;
@@ -188,6 +197,33 @@ public class Event implements Serializable{
 
 	public void setTypeModel(TypeModel typeModel) {
 		this.typeModel = typeModel;
+	}
+	
+	
+
+	public String getPaid() {
+		return paid;
+	}
+
+	public void setPaid(String paid) {
+		this.paid = paid;
+	}
+	
+
+	public boolean isCheckPaid() {
+		return "Y".equalsIgnoreCase(paid);
+	}
+
+	public void setCheckPaid(boolean checkPaid) {
+		this.checkPaid = checkPaid;
+	}
+	
+	
+
+	public float getPrice() {
+		if(this.typeModel!=null)
+			this.price = this.typeModel.getPrice()*this.typeModel.getSize();
+		return price;
 	}
 
 	@Override

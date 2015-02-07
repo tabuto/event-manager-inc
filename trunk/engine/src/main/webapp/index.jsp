@@ -8,16 +8,19 @@
 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Lista Eventi
+                            HomePage
                         </h1>
                         <ol class="breadcrumb">
                             <li>
                                 <i class="fa fa-dashboard"></i>  <a href="/engine/index.html">Dashboard</a>
                             </li>
                             <li class="active">
-                                <i class="fa fa-table"></i> Lista Eventi
+                                <i class="fa fa-table"></i> HomePage
                             </li>
                         </ol>
                     </div>
                 </div>
+                
+                
+                
 <jsp:include page="/WEB-INF/jsp/template_footer.jsp" />

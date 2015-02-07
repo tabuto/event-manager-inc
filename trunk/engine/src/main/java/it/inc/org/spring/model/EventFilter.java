@@ -26,6 +26,14 @@ public class EventFilter extends AbstractFilter{
 	
 	private  String text;
 	
+	private String userNameTel;
+	
+	private String typeName;
+	
+	private String price;
+	
+	private String paid;
+	
 	
 	public EventFilter(Map<String,String> map){
 		super(map);
@@ -33,6 +41,10 @@ public class EventFilter extends AbstractFilter{
 		String startDates = getSearchFilter(1, map);
 		String endDates = getSearchFilter(2, map);
 		this.text = getSearchFilter(3, map);
+		this.typeName = getSearchFilter(4, map);
+		this.userNameTel = getSearchFilter(5, map);
+		this.price = getSearchFilter(6, map);
+		this.paid = getSearchFilter(7, map);
 		
 		if(startDates != null && startDates.length()>2 && startDates.indexOf('~') == (startDates.length()-1)){
 			//una sola data
@@ -109,15 +121,38 @@ public class EventFilter extends AbstractFilter{
 		return text;
 	}
 
+	
+
+	public String getUserNameTel() {
+		return userNameTel;
+	}
+
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+
+	public String getPrice() {
+		return price;
+	}
+
+
+	public String getPaid() {
+		return paid;
+	}
+
 
 	@Override
 	public String toString() {
 		return "EventFilter [id=" + id + ", startDateFrom=" + startDateFrom
 				+ ", startDateTo=" + startDateTo + ", endDateFrom="
 				+ endDateFrom + ", endDateTo=" + endDateTo + ", text=" + text
-				+ "]";
+				+ ", userNameTel=" + userNameTel + ", typeName=" + typeName
+				+ ", price=" + price + ", paid=" + paid + "]";
 	}
-	
+
+
 	
 	
 }

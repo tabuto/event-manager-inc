@@ -7,8 +7,16 @@
 
 <jsp:include page="template_head.jsp" />
 
+<!-- 
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+
+ -->
+
+<script src="<c:url value="/resources/js/jquery-1.9.1.min.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/jquery-ui.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/jquery.dataTables.js" />" type="text/javascript"></script>
+<script src="<c:url value="/resources/js/jscolor.js" />" type="text/javascript"></script>
 
 <script type="text/javascript">
 
@@ -35,6 +43,7 @@
     <th>Dimensioni</th>
     <th>Prezzo euro-ora persona</th>
     <th>Descrizione</th>
+    <th>Colore</th>
     <th>Azioni</th>
   </tr></thead>
 
@@ -47,6 +56,7 @@
     <td>${item.size}</td>
     <td>${item.price}</td>
      <td>${item.description}</td>
+     <td>${item.color}</td>
     <td><a href="/JFootballWeb/delCampo/${item.id}.html">Elimina</a></td>
   </tr>
 </c:forEach>
@@ -54,10 +64,8 @@
 </table>
 
 <br>
-  <div class="row">
-     <div class="col-lg-6">
 
-                       
+<div id="type-form-modal" title="Dettaglio Campo">                       
 <form:form id="typeForm" method="POST" commandName="item" action="/engine/saveType" role="form">
   
   		
@@ -80,24 +88,52 @@
  		<form:label path="description">Descrizione</form:label>
         <form:input path="description" class="form-control"/>
 		</div>
+		<div class="form-group">
+ 		<form:label path="Color">Colore</form:label>
+        <form:input path="color" class="color"/>
+		</div>
 		 <div class="form-group">
-        	<input type="reset" value="Azzera" id="reset" class="btn btn-default" />
+        	<input type="reset" value="Nuovo" id="reset" class="btn btn-default" />
             <input type="submit" value="Salva" class="btn btn-default"/>
   		</div>
  
 </form:form>
-</div>
 </div>
  <script>
  function isEmpty(str) {
 	    return (!str || 0 === str.length);
 	}
 
+ var evDialog = $( "#type-form-modal" ).dialog({
+	    autoOpen: false,
+	    height: 350,
+	    width: 600,
+	    modal: true,
+	    buttons: {
+	      "Close": function() {
+	    	  //resetUserForm();
+	    	  evDialog.dialog( "close" ); 
+	      }
+	    },
+	    close: function() {
+	      
+	      //allFields.removeClass( "ui-state-error" );
+	      //var args = $("#user-form-modal").data('args');
+	      //if (args != null )
+	      	//saveNewEvent(args,false);
+	    }
+	  });
 
  $(document).ready(function() {
 	    var table = $('#typesTable').DataTable(
 	    		{
-	    	        "columnDefs": [
+	    		 "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+
+	    			 $('td:eq(5)', nRow).css('background-color', aData[5]);
+	                    
+	    		 },
+	    			
+	    	     "columnDefs": [
 	    	            {
 	    	                "targets": [ 0 ],
 	    	                "visible": false,
@@ -116,7 +152,13 @@
 		    $("#size").val(oData[2]);
 			$("#price").val(oData[3]);
 			$("#description").val(oData[4]);
+			$("#color").val(oData[5]);
+			$("#color").css('background-color', $("#color").val());	
+			evDialog.dialog( "open" );
+			
 		});
+	    
+	    
  });
 
 
@@ -141,8 +183,9 @@
 	    size = $("#size").val(),
 	    price =  $("#price" ).val(),
 	    desc = $("#description" ).val();
+	    col = $("#color" ).val();
 	  
-	  var json = { "id" : id, "name" : name, "size": size,"price" : price,  "description" : desc };
+	  var json = { "id" : id, "name" : name, "size": size,"price" : price,  "description" : desc, "color" : '#'+col };
 	 
 	 
 	  // Send the data using post
