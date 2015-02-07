@@ -45,6 +45,8 @@
     <th>Testo</th>
     <th>Campo</th>
     <th>Utente</th>
+    <th>Prezzo</th>
+    <th>Pagato</th>
   </tr></thead>
 
 
@@ -66,7 +68,7 @@
 </table>
 
 <br>
-
+<!-- 
 <form:form id="eventForm" method="POST" commandName="event" action="/engine/saveEvent">
    <table>
     <tr>
@@ -101,6 +103,8 @@
 </table>  
 </form:form>
 
+ -->
+
  <script>
  function isEmpty(str) {
 	    return (!str || 0 === str.length);
@@ -127,6 +131,7 @@
 		    	         $('td:eq(5)', nRow).html('<a href="/engine/loadUser/' + aData.user + '">' +
 		    	                aData.userModel.name + (aData.userModel.surnname==undefined?' ': aData.userModel.surnname)+ '('+aData.userModel.tel +')' +'</a>');
 	    	            
+		    	         $('td:eq(7)', nRow).html(aData.paid=="Y"?'SI':'<b>NO<b');
 	    	           
 	    	            
 	    	          
@@ -154,6 +159,12 @@
 		    	                   },
 	    	                       {
 		    	                        "mDataProp" : "user"
+		    	                   },
+	    	                       {
+		    	                        "mDataProp" : "price"
+		    	                   },
+	    	                       {
+		    	                        "mDataProp" : "paid"
 		    	                   }
 	    		],
 	    	        
@@ -169,7 +180,11 @@
 					aoColumns: [ 	{ type: "text" },
 					    	 		{ type: "date-range" },
 	                                { type: "date-range" },
-	                                { type: "text" }
+	                                { type: "text" },
+	                                { type: "text" },
+	                                { type: "text" },
+	                                { type: "text" },
+	                                { type: "select",values:['SI','NO'] }
 							]
 
 			});
@@ -178,12 +193,12 @@
 		    var oData = table.fnGetData(this);
 		    //var json = JSON.parse(oData);
 		    //Valorizzo il form
-		    $("#id").val(oData.id);
+/* 		    $("#id").val(oData.id);
 		    $("#start").val(oData.start);
 		    $("#end").val(oData.end);
 			$("#text").val(oData.text);
 			$("#type").val(oData.type);
-			$("#user").val(oData.user);
+			$("#user").val(oData.user); */
 		});
 	    
 	    $("#eventsTable").css("width","100%");

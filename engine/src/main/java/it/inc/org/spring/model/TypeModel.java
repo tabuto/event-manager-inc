@@ -28,6 +28,8 @@ public class TypeModel implements Serializable{
 	private float price;
 	@Column(name="size")
 	private int size;
+	@Column(name="color")
+	private String color;
 
 	public int getId() {
 		return id;
@@ -75,6 +77,15 @@ public class TypeModel implements Serializable{
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+	
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
 	}
 
 	@Override

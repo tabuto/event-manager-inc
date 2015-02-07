@@ -143,7 +143,7 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Enjine <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -165,7 +165,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="/engine/index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="/engine"><i class="fa fa-fw fa-dashboard"></i> Home</a>
                     </li>
                     <li>
                         <a href="/engine/types.html"><i class="fa fa-fw fa-bar-chart-o"></i> Campi</a>

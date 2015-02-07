@@ -213,9 +213,35 @@ public class EventManagerController {
 		return evList;
 	}
 	
+	/*
+	 * Cambia lo stato dell'evento da pagato a non pagato e viceversa
+	 */
+	@RequestMapping(value = "/togglePaidEvent", method = RequestMethod.GET)
+	public @ResponseBody List<Event> togglePaidEvent(
+			@RequestParam("term") String id, @RequestParam("today") String today) {
+		
+		Event toUpdate = eventService.getEventById(id);
+		if(toUpdate.getPaid()==null ||(toUpdate.getPaid()==null && "N".equals(toUpdate.getPaid())) )
+			toUpdate.setPaid("Y");
+		else if(toUpdate.getPaid()!=null && "Y".equals(toUpdate.getPaid())) 
+			toUpdate.setPaid("N");
+		eventService.saveEvent(toUpdate);
+		List<Event> evList = eventService.getDayEvents(today);
+		System.out.println("Get all day events: " + evList.size());
+		return evList;
+	}
+	
+	
 	 @RequestMapping("/typeCombo")
 	 public @ResponseBody List<TypeModel> getTypeList(){
-	 return eventService.getTypesList();
+		 return eventService.getTypesList();
+	 }
+	 
+
+	 @RequestMapping(value = "/loadUser", method = RequestMethod.GET)
+	 public @ResponseBody UserModel loadUser(@RequestParam("term") String id) {
+		UserModel user = eventService.getUser(Long.parseLong(id));
+	 	return user;
 	 }
 
 	/*
@@ -295,12 +321,7 @@ public class EventManagerController {
 	// return new ModelAndView("calendar","model",model);
 	// }
 
-	// @RequestMapping(value = "/loadUser/{id}", method = RequestMethod.GET)
-	// public @ResponseBody UserModel loadUser(@PathVariable Integer id,Model
-	// model) {
-	// UserModel user = eventService.getUser(id);
-	// return user;
-	// }
+
 
 	// @RequestMapping(value = "/reservUser/{id}", method = RequestMethod.GET)
 	// public ModelAndView reserveUser(@PathVariable Integer id,Model model) {
