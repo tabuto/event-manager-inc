@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -73,7 +74,7 @@ public class Event implements Serializable{
     @JoinColumn(name = "id_type")
     private TypeModel typeModel;
     
-    @Transient
+    @Column(name = "price")
     private float price;
 
 	public String getId() {
@@ -218,11 +219,14 @@ public class Event implements Serializable{
 		this.checkPaid = checkPaid;
 	}
 	
+	public void setPrice(float price){
+		this.price = price;
+	}
 	
 
 	public float getPrice() {
-		if(this.typeModel!=null)
-			this.price = this.typeModel.getPrice()*this.typeModel.getSize();
+		if(this.price <=0 && this.typeModel!=null && this.startDate!=null && this.endDate!=null)
+			this.price = this.typeModel.getPrice()*this.typeModel.getSize() * EngineUtils.getDatesDiff( startDate,endDate, TimeUnit.HOURS);
 		return price;
 	}
 

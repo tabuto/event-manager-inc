@@ -20,7 +20,10 @@
                         </ol>
                     </div>
                 </div>
-                
+
+<p>
+Pagina di Benvenuto
+</p>                
                 
                 
 <jsp:include page="/WEB-INF/jsp/template_footer.jsp" />

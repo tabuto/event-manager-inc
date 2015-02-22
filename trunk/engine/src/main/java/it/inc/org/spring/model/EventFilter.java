@@ -49,7 +49,7 @@ public class EventFilter extends AbstractFilter{
 		if(startDates != null && startDates.length()>2 && startDates.indexOf('~') == (startDates.length()-1)){
 			//una sola data
 			try {
-				startDateFrom = new SimpleDateFormat("dd/mm/yyyy").parse(startDates.substring(0,startDates.indexOf('~')));
+				startDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(startDates.substring(0,startDates.indexOf('~')));
 			} catch (ParseException e) {
 				startDateFrom = null;
 				e.printStackTrace();
@@ -58,8 +58,8 @@ public class EventFilter extends AbstractFilter{
 			//range di date
 			//una sola data
 			try {
-				startDateFrom = new SimpleDateFormat("dd/mm/yyyy").parse(startDates.substring(0,startDates.indexOf('~')));
-				startDateTo = new SimpleDateFormat("dd/mm/yyyy").parse(startDates.substring(startDates.indexOf('~')+1,startDates.length()));
+				startDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(startDates.substring(0,startDates.indexOf('~')));
+				startDateTo = new SimpleDateFormat("dd/MM/yyyy").parse(startDates.substring(startDates.indexOf('~')+1,startDates.length()));
 			} catch (ParseException e) {
 				startDateFrom = null;
 				startDateTo = null;
@@ -71,7 +71,7 @@ public class EventFilter extends AbstractFilter{
 		if(endDates != null && endDates.length()>2 && endDates.indexOf('~') == (endDates.length()-1)){
 			//una sola data
 			try {
-				endDateFrom = new SimpleDateFormat("dd/mm/yyyy").parse(endDates.substring(0,endDates.indexOf('~')));
+				endDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(endDates.substring(0,endDates.indexOf('~')));
 			} catch (ParseException e) {
 				endDateFrom = null;
 				e.printStackTrace();
@@ -80,8 +80,8 @@ public class EventFilter extends AbstractFilter{
 			//range di date
 			//una sola data
 			try {
-				endDateFrom = new SimpleDateFormat("dd/mm/yyyy").parse(endDates.substring(0,endDates.indexOf('~')));
-				endDateTo = new SimpleDateFormat("dd/mm/yyyy").parse(endDates.substring(endDates.indexOf('~')+1,endDates.length()));
+				endDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(endDates.substring(0,endDates.indexOf('~')));
+				endDateTo = new SimpleDateFormat("dd/MM/yyyy").parse(endDates.substring(endDates.indexOf('~')+1,endDates.length()));
 			} catch (ParseException e) {
 				endDateFrom = null;
 				endDateTo = null;
@@ -131,7 +131,6 @@ public class EventFilter extends AbstractFilter{
 	public String getTypeName() {
 		return typeName;
 	}
-
 
 	public String getPrice() {
 		return price;

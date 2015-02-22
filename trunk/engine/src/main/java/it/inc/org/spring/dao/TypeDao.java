@@ -9,5 +9,7 @@ public interface TypeDao {
 	public TypeModel saveType(TypeModel t);
 	
 	public List<TypeModel> getTypeList();
+	
+	public TypeModel getById(int id);
 
 }
