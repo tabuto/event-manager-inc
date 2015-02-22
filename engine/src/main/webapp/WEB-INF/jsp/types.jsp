@@ -64,7 +64,7 @@
 </table>
 
 <br>
-
+<input type="reset" value="Nuovo" id="createNew" class="btn btn-default" />
 <div id="type-form-modal" title="Dettaglio Campo">                       
 <form:form id="typeForm" method="POST" commandName="item" action="/engine/saveType" role="form">
   
@@ -161,7 +161,17 @@
 	    
  });
 
-
+ $("#createNew").click(function() {
+	 
+	 	$("#id").val(0);
+	    $("#name").val('');
+	    $("#size").val('');
+		$("#price").val('');
+		$("#description").val('');
+		$("#color").val('');
+		$("#color").css('background-color', '#FFFFFF');	
+		evDialog.dialog( "open" );
+ });
 
  $("#reset").click(function() {
 	 

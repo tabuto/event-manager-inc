@@ -1,6 +1,7 @@
 package it.inc.org.spring.controller;
 
 import it.inc.org.spring.model.DataTableSource;
+import it.inc.org.spring.model.EngineUtils;
 import it.inc.org.spring.model.Event;
 import it.inc.org.spring.model.TypeModel;
 import it.inc.org.spring.model.UserModel;
@@ -10,7 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +29,8 @@ public class EventManagerController {
 
 	@Autowired
 	private EventService eventService;
+	
+	private static final Logger log = Logger.getLogger(EventManagerController.class);
 
 	/*
 	 * **************************************************
@@ -221,10 +226,15 @@ public class EventManagerController {
 			@RequestParam("term") String id, @RequestParam("today") String today) {
 		
 		Event toUpdate = eventService.getEventById(id);
-		if(toUpdate.getPaid()==null ||(toUpdate.getPaid()==null && "N".equals(toUpdate.getPaid())) )
+		if(toUpdate.getPaid()==null ||(toUpdate.getPaid()!=null && "N".equals(toUpdate.getPaid())) ){
 			toUpdate.setPaid("Y");
-		else if(toUpdate.getPaid()!=null && "Y".equals(toUpdate.getPaid())) 
+			toUpdate.setPrice( toUpdate.getTypeModel().getSize()
+					* toUpdate.getTypeModel().getPrice() 
+					* EngineUtils.getDatesDiff( toUpdate.getStartDate(),toUpdate.getEndDate(), TimeUnit.HOURS));
+		}else if(toUpdate.getPaid()!=null && "Y".equals(toUpdate.getPaid())){
 			toUpdate.setPaid("N");
+			toUpdate.setPrice(0);
+		}
 		eventService.saveEvent(toUpdate);
 		List<Event> evList = eventService.getDayEvents(today);
 		System.out.println("Get all day events: " + evList.size());
@@ -234,6 +244,7 @@ public class EventManagerController {
 	
 	 @RequestMapping("/typeCombo")
 	 public @ResponseBody List<TypeModel> getTypeList(){
+		 log.info("Call TypeList ");
 		 return eventService.getTypesList();
 	 }
 	 

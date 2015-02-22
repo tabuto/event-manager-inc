@@ -103,8 +103,31 @@ public class EventServiceImpl implements EventService{
 
 	@Override
 	public TypeModel saveType(TypeModel toSave) {
-		// TODO Auto-generated method stub
+		//Se viene aggiornato il prezzo o le dimensioni
+		//viene disattivato il vecchio campo e creato un nuovo Type
+		//con le nuove dimensioni/prezzo. In modo da mantenere
+		//coerente il prezzo pagato nelle vecchie prenotazioni
+		
+		if(toSave!=null && toSave.getId()>0){
+//			TypeModel prev = getTypeDaoImpl().getById(toSave.getId());
+//			
+//			if(prev.getPrice()!=toSave.getPrice() || 
+//					prev.getSize()!= toSave.getSize()){
+//				//disattivo il precedente e ne creo uno nuovo
+//				prev.setwActive("N");
+//				getTypeDaoImpl().saveType(prev);
+//				
+//				toSave.setId(0);
+//				return getTypeDaoImpl().saveType(toSave);
+//			}else {
+//				return getTypeDaoImpl().saveType(toSave);
+//			}
+			
+		}
 		return getTypeDaoImpl().saveType(toSave);
+		//return toSave;
+		
+		
 	}
 
 	@Override

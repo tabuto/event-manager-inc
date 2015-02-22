@@ -112,7 +112,7 @@
 
 function getResourceName(dp,resId){
 	var i=0;
-	for(i=0; dp.resources.length;i++){
+	for(i=0; i<dp.resources.length;i++){
 		if(dp.resources[i].id == resId){
 			return dp.resources[i].name;
 		}
@@ -122,7 +122,7 @@ function getResourceName(dp,resId){
 
 function getResourceColor(dp,resId){
 	var i=0;
-	for(i=0; dp.resources.length;i++){
+	for(i=0;i< dp.resources.length;i++){
 		if(dp.resources[i].id == resId){
 			return dp.resources[i].color;
 		}
@@ -143,13 +143,15 @@ function togglePaidEvent(id, startdate){
    	            end: new DayPilot.Date(longToDate(json[i].endDate)),
    	            id: json[i].id,
    	       		resource: ""+json[i].type,
-   	            text: json[i].text
+   	            text: json[i].text,
+   	         	userid: ""+json[i].user,
+	            paid: json[i].paid
    	            
    	          
    	        });
    		   //e.type = data[i].campo
-   		  e.userid = ""+json[i].user;
-   		  e.paid = json[i].paid;
+/*    		  e.userid = ""+json[i].user;
+   		  e.paid = json[i].paid; */
    	      dp.events.add(e);
    	      dp.update();    
    	}
@@ -179,13 +181,16 @@ function deleteEvent(id, startdate){
    	            end: new DayPilot.Date(longToDate(json[i].endDate)),
    	            id: json[i].id,
    	       		resource: ""+json[i].type,
-   	            text: json[i].text
+   	            text: json[i].text,
+   	         	userid: ""+json[i].user,
+	            paid: json[i].paid
+   	            
    	            
    	          
    	        });
    		   //e.type = data[i].campo
-   		  e.userid = ""+json[i].user;
-   		  e.paid = json[i].paid;
+/*    		  e.userid = ""+json[i].user;
+   		  e.paid = json[i].paid; */
    	      dp.events.add(e);
    	      dp.update();    
    	}
@@ -331,7 +336,7 @@ function saveNewEvent(args, update){
 				 "user" :  $("#iduser").val(),
 				 "paid" : "N"
 				 };
-		 alert(getResourceColor(dp, args.resource));
+		 //alert(getResourceColor(dp, args.resource));
 	 }
 	 
 	    
@@ -354,7 +359,9 @@ function saveNewEvent(args, update){
 	      		        end: args.end,
 	      		        id: DayPilot.guid(),
 	      		        resource: args.resource,
-	      		        text: evtext
+	      		        text: evtext,
+	     	            userid: $("#iduser").val(),
+	     	            paid: "N"
 	      		    });
 	                e.userid = $("#iduser");
 	                e.paid = "N";

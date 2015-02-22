@@ -30,6 +30,8 @@ public class TypeModel implements Serializable{
 	private int size;
 	@Column(name="color")
 	private String color;
+	@Column(name="w_active")
+	public String wActive = "Y";
 
 	public int getId() {
 		return id;
@@ -86,6 +88,16 @@ public class TypeModel implements Serializable{
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+	
+	
+
+	public String getwActive() {
+		return wActive;
+	}
+
+	public void setwActive(String wActive) {
+		this.wActive = wActive;
 	}
 
 	@Override

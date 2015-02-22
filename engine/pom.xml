@@ -13,6 +13,7 @@
 		<joda-time.version>2.3</joda-time.version>
 		<jackson.version>2.4.0</jackson.version>
    		<jaxb-api.version>2.2.11</jaxb-api.version>
+   	
 	</properties>
 
 	<dependencies>
@@ -89,6 +90,15 @@
 			<artifactId>usertype.core</artifactId>
 			<version>3.0.0.CR1</version>
 		</dependency>
+
+		<!-- Log4j 
+				<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		-->
+
 
 	</dependencies>
 </project>

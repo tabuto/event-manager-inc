@@ -62,6 +62,7 @@
 </table>
 
 <br>
+<input type="reset" value="Crea Nuovo" id="createNew" class="btn btn-default" />
 
 <div id="user-form-modal" title="User Detail">
 <form:form id="userForm" method="POST" commandName="user" action="/engine/saveUser" role="form">
@@ -144,6 +145,16 @@
  });
 
 
+ $("#createNew").click(function() {
+	 
+	 	$("#id").val(0);
+	 	$("#name").val('');
+		$("#surname").val('');
+		$("#email").val('');
+		$("#tel").val('');
+		$("#role").val('');
+		evDialog.dialog( "open" );
+});
 
  $("#reset").click(function() {
 	 
